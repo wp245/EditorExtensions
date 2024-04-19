@@ -24,7 +24,8 @@ namespace EditorFramework
             var m_parent =  editorWindowType.GetField("m_Parent", BindingFlags.Instance | BindingFlags.NonPublic);
             mEditorWindowTypes = AppDomain.CurrentDomain.GetAssemblies()
             .SelectMany(assembly => assembly.GetTypes())
-            .Where(type => type.IsSubclassOf(editorWindowType));
+            .Where(type => type.IsSubclassOf(editorWindowType))
+            .Where(type => type.GetCustomAttribute<CustomEditorWindowAttribute>() != null);
 
         }
 
