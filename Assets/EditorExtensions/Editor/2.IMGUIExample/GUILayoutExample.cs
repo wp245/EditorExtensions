@@ -5,6 +5,7 @@ using UnityEditor;
 using System.Drawing;
 using System;
 using Codice.Client.BaseCommands.Revert;
+using Unity.VisualScripting;
 
 namespace EditorExtensions
 {
@@ -16,7 +17,27 @@ namespace EditorExtensions
             GetWindow<GUILayoutExample>().Show();
         }
 
+        enum PageID
+        {
+            Basic,
+            other
+        }
 
+        private PageID mCurrentPageID;
+        
+        private void OnGUI() {
+            mCurrentPageID = (PageID)GUILayout.Toolbar((int)mCurrentPageID, Enum.GetNames(typeof(PageID)));
+            if(mCurrentPageID == PageID.Basic)
+            {
+                Basic();
+            }
+            else if(mCurrentPageID == PageID.other)
+            {
+
+            }
+        }
+
+        #region  Basic
         private String mTextFieldValue;
         private String mTextAreaValue;
         private String mPasswordFieldValue = string.Empty;
@@ -25,7 +46,7 @@ namespace EditorExtensions
         private int mToolBarIndex;
         private bool mToggleValue;
         private int mSelectedGridIndex;
-        private void OnGUI() {
+        void Basic(){
             GUILayout.Label("Label: Hello IMGUI");
             mScrollPosition = GUILayout.BeginScrollView(mScrollPosition);
             {
@@ -114,9 +135,8 @@ namespace EditorExtensions
                 GUILayout.EndVertical();
             }
             GUILayout.EndScrollView();
-            
-            
         }
+        #endregion
     }
 }
 
