@@ -21,7 +21,8 @@ namespace EditorFramework
 
         private void OnEnable() {
 
-            mEditorWindowTypes =typeof(EditorWindow).GetSubTypesWithClassAttributeInAssemblies<CustomEditorWindowAttribute>();
+            mEditorWindowTypes =typeof(EditorWindow).GetSubTypesWithClassAttributeInAssemblies<CustomEditorWindowAttribute>()
+                                .OrderBy(type=>type.GetCustomAttribute<CustomEditorWindowAttribute>().RenderOrder);
 
         }
 

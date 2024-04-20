@@ -8,7 +8,7 @@ using UnityEngine;
 
 namespace EditorFramework
 {
-    [CustomEditorWindow]
+    [CustomEditorWindow(3)]
     public class TypeExExample : EditorWindow
     {
         public class DescriptionBase
