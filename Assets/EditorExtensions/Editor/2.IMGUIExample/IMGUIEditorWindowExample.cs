@@ -32,13 +32,15 @@ namespace EditorExtensions
         enum APIMode
         {
             GUILayout,
-            GUI
+            GUI,
+            EditorGUI
         }
 
         private PageID mCurrentPageID;
 
         private GUILayoutAPI mGUILayoutAPI = new GUILayoutAPI();
         private GUIAPI mGUIAPI = new GUIAPI();
+        private EditorGUIAPI mEditorGUIAPI = new EditorGUIAPI();
 
         private APIMode mCurAPIMode = APIMode.GUILayout;
         
@@ -81,6 +83,10 @@ namespace EditorExtensions
             else if(mCurAPIMode == APIMode.GUI)
             {
                 mGUIAPI.Draw();
+            }
+            else if(mCurAPIMode == APIMode.EditorGUI)
+            {
+                mEditorGUIAPI.Draw();
             }
         }
 
