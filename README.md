@@ -1,5 +1,8 @@
 # EditorExtensions
  
+### v0.0.4
+GUI简单框架
+
 
 ### v0.0.3
 仅绘制自定义窗口
