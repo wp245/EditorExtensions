@@ -33,7 +33,8 @@ namespace EditorExtensions
         {
             GUILayout,
             GUI,
-            EditorGUI
+            EditorGUI,
+            EditorGUILayoutAPI
         }
 
         private PageID mCurrentPageID;
@@ -41,6 +42,7 @@ namespace EditorExtensions
         private GUILayoutAPI mGUILayoutAPI = new GUILayoutAPI();
         private GUIAPI mGUIAPI = new GUIAPI();
         private EditorGUIAPI mEditorGUIAPI = new EditorGUIAPI();
+        private EditorGUILayoutAPI mEditorGUILayoutAPI = new EditorGUILayoutAPI();
 
         private APIMode mCurAPIMode = APIMode.GUILayout;
         
@@ -87,6 +89,10 @@ namespace EditorExtensions
             else if(mCurAPIMode == APIMode.EditorGUI)
             {
                 mEditorGUIAPI.Draw();
+            }
+            else if(mCurAPIMode == APIMode.EditorGUILayoutAPI)
+            {
+                mEditorGUILayoutAPI.Draw();
             }
         }
 
