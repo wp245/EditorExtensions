@@ -29,7 +29,7 @@ namespace EditorExtensions
         private float mVerticalSliderValue;
         public void Draw()
         {
-            mScrollViewPos = GUI.BeginScrollView(new Rect(20, 0, 400, 500), mScrollViewPos, new Rect(0,0,400,1000));
+            mScrollViewPos = GUI.BeginScrollView(new Rect(20, 60, 400, 500), mScrollViewPos, new Rect(0,0,400,1000));
             {
                 GUI.Label(mLableRect, "Hello GUI API");
                 mTextFieldValue =  GUI.TextField(mTextFieldRect, mTextFieldValue);
