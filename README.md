@@ -1,5 +1,10 @@
 # EditorExtensions
 
+# UPM Package
+## Install via git URL
+
+You can add `https://github.com/wp245/EditorExtensions.git?path=Assets/Plugins/EditorExPlugin` to Package Manager
+
 ### v0.0.7
 窗口入口排序
 
