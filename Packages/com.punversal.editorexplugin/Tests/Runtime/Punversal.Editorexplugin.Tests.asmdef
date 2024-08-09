@@ -1,0 +1,11 @@
+{
+    "name": "Punversal.Editorexplugin.Tests",
+    "references": [
+        "Punversal.Editorexplugin"
+    ],
+    "optionalUnityReferences": [
+        "TestAssemblies"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": []
+}

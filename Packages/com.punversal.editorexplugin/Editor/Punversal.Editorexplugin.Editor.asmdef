@@ -1,0 +1,10 @@
+{
+    "name": "Punversal.Editorexplugin.Editor",
+    "references": [
+      "Punversal.Editorexplugin"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": []
+}
