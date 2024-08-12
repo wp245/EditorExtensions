@@ -4,7 +4,7 @@ using UnityEngine;
 namespace EditorExtensions
 {
     [CustomEditor(typeof(CustomEditorExample), false)]
-    public class CustomEditorExampleInspector: Editor
+    public class CustomEditorExampleInspector: UnityEditor.Editor
     {
         CustomEditorExample mTarget
         {
