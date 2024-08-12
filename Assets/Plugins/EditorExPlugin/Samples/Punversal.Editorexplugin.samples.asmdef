@@ -1,0 +1,17 @@
+{
+    "name": "Punversal.Editorexplugin.samples",
+    "rootNamespace": "",
+    "references": [
+        "GUID:7c9aed847787c4264aa082459fc51beb",
+        "GUID:f2580ccee1f6f4572a2adb32bed65169"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
