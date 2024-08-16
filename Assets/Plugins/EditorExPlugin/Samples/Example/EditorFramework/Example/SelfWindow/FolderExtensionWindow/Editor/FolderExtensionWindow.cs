@@ -15,10 +15,22 @@ namespace EditorFramework
         private string DisplayFavoriteRecordFolderCount = "10";
         private static bool mFolderOpenTrackFoldout = false;
         private static bool mFolderFavoriteRecordFoldout = true;
-
+        
+        private static FolderExtensionWindow windowInstance;
+        
         static FolderExtensionWindow()
         {
             mFolderOpenTrackFoldout = false;
+        }
+        
+        private void OnEnable()
+        {
+            windowInstance = this;
+        }
+
+        private void OnDisable()
+        {
+            windowInstance = null;
         }
 
         private void OnGUI()
@@ -38,7 +50,10 @@ namespace EditorFramework
 
         public static void RepaintWindow()
         {
-            EditorWindow.GetWindow<FolderExtensionWindow>().Repaint();
+            if (FolderExtensionWindow.windowInstance)
+            {
+                EditorWindow.GetWindow<FolderExtensionWindow>().Repaint();
+            }
         }
 
         private void OnFolderOpenTrackerGUI()
@@ -322,6 +337,135 @@ namespace EditorFramework
         {
             FolderFavoriteRecordsList.Clear();
             EditorPrefs.DeleteKey(FolderFavoriteRecordKey);
+        }
+    }
+    
+    [InitializeOnLoad]
+    public class FolderOpenSequence
+    {
+        private const string FolderOpenSequenceKey = "FolderOpenSequenceKey";
+        private static CustomCircularStack<string> mFolderOpenSequenceStack = new CustomCircularStack<string>(100);
+        private static List<string> cacheList = new List<string>();
+        private static bool mForwardState = false;
+        static FolderOpenSequence()
+        {
+            LoadKey();
+            EditorApplication.projectWindowItemOnGUI += OnProjectWindowGUI;
+        }
+
+        private static void OnProjectWindowGUI(string guid, Rect selectionRect)
+        {
+            Event e = Event.current;
+            if (e.type == EventType.MouseDown && e.button == 0 && selectionRect.Contains(e.mousePosition))
+            {
+                var path = AssetDatabase.GUIDToAssetPath(guid);
+                if (mFolderOpenSequenceStack.IsEmpty())
+                {
+                    mFolderOpenSequenceStack.Push(path);
+                    SaveKey();
+                }
+                else if(mFolderOpenSequenceStack.Peek() != path)
+                {
+                    mFolderOpenSequenceStack.Push(path);
+                    SaveKey();
+                }
+                
+                FolderExtensionWindow.RepaintWindow();
+            }
+        }
+
+        [MenuItem("Assets/FolderExtension/back folder %&j")]
+        private static void BackFolder()
+        {
+            if (!mFolderOpenSequenceStack.IsEmpty())
+            {
+                var path = mFolderOpenSequenceStack.Pop();
+                cacheList.Add(path);
+                if (mForwardState && !mFolderOpenSequenceStack.IsEmpty())
+                {
+                    path = mFolderOpenSequenceStack.Pop();
+                    cacheList.Add(path);
+                }
+                Selection.activeObject = AssetDatabase.LoadAssetAtPath<Object>(path);
+                mForwardState = false;
+            }
+        }
+        
+        [MenuItem("Assets/FolderExtension/forward folder %&l")]
+        private static void ForwardFolder()
+        {
+            if (cacheList.Count > 0)
+            {
+                var path = cacheList.Last();
+                mFolderOpenSequenceStack.Push(path);
+                cacheList.RemoveAt(cacheList.Count - 1);
+                if (!mForwardState && cacheList.Count > 0)
+                {
+                    path = cacheList.Last();
+                    mFolderOpenSequenceStack.Push(path);
+                    cacheList.RemoveAt(cacheList.Count - 1);
+                }
+                Selection.activeObject = AssetDatabase.LoadAssetAtPath<Object>(path);
+                mForwardState = true;
+            }
+        }
+        
+        
+        
+        [System.Serializable]
+        private class FolderOpenSequenceData
+        {
+            public List<FolderOpenSequenceEntry> entries;
+        }
+
+        [System.Serializable]
+        private class FolderOpenSequenceEntry
+        {
+            public string path;
+        }
+
+        public static void LoadKey()
+        {
+            mFolderOpenSequenceStack = new CustomCircularStack<string>(100);
+
+            string json = EditorPrefs.GetString(FolderOpenSequenceKey, "{}");
+            var data = JsonUtility.FromJson<FolderOpenSequenceData>(json);
+            if (data != null && data.entries != null)
+            {
+                foreach (var entry in data.entries)
+                {
+                    mFolderOpenSequenceStack.Push(entry.path);
+                }
+            }
+        }
+
+        public static void SaveKey()
+        {
+            var data = new FolderOpenSequenceData();
+            
+            while (!mFolderOpenSequenceStack.IsEmpty())
+            {
+                cacheList.Add(mFolderOpenSequenceStack.Pop());
+            }
+            cacheList.Reverse();
+            data.entries = cacheList.Select(value => new FolderOpenSequenceEntry(){path = value}).ToList();
+
+            string json = JsonUtility.ToJson(data);
+            EditorPrefs.SetString(FolderOpenSequenceKey, json);
+            
+            foreach (var se in cacheList)
+            {
+                mFolderOpenSequenceStack.Push(se);
+            }
+            cacheList.Clear();
+        }
+
+        [MenuItem("Assets/FolderExtension/clear FolderOpenSequence")]
+        public static void ClearKey()
+        {
+            cacheList.Clear();
+            mFolderOpenSequenceStack.Clear();
+            EditorPrefs.DeleteKey(FolderOpenSequenceKey);
         }
     }
 }
