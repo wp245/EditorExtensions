@@ -22,6 +22,12 @@ namespace EditorFramework
         {
             mFolderOpenTrackFoldout = false;
         }
+
+        [MenuItem("FolderExtensionWindow/Open")]
+        public static void Open()
+        {
+            EditorWindow.GetWindow<FolderExtensionWindow>().Show();
+        }
         
         private void OnEnable()
         {
@@ -442,7 +448,7 @@ namespace EditorFramework
         public static void SaveKey()
         {
             var data = new FolderOpenSequenceData();
-            
+            cacheList.Clear();
             while (!mFolderOpenSequenceStack.IsEmpty())
             {
                 cacheList.Add(mFolderOpenSequenceStack.Pop());
